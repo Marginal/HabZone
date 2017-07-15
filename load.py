@@ -12,6 +12,8 @@ if __debug__:
 
 from config import config
 
+VERSION = '1.00'
+
 WORLDS = [
     # Type     Black-body temp range
     ('Metal-Rich',   0,  1103.0),
@@ -44,16 +46,18 @@ def plugin_app(parent):
 
 def plugin_prefs(parent):
     frame = nb.Frame(parent)
-    frame.columnconfigure(1, weight=1)
+    nb.Label(frame, text = 'Display:').grid(row = 0, padx = 10, pady = (10,0), sticky=tk.W)
 
     setting = config.getint('habzone') or 2
     this.settings = []
     row = 1
     for (name, high, low) in WORLDS:
         var = tk.IntVar(value = (setting & row) and 1)
-        nb.Checkbutton(frame, text = name, variable = var).grid(row = row, column = 1, padx = 10, pady = 2, sticky=tk.W)
+        nb.Checkbutton(frame, text = name, variable = var).grid(row = row, padx = 10, pady = 2, sticky=tk.W)
         this.settings.append(var)
         row *= 2
+
+    nb.Label(frame, text = 'Version %s' % VERSION).grid(padx = 10, pady = 10, sticky=tk.W)
 
     return frame
 
