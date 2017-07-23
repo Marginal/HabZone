@@ -16,6 +16,9 @@ from l10n import Locale
 
 VERSION = '1.00'
 
+SETTING_DEFAULT = 2	# Earth-like
+SETTING_NONE    = 0xffff
+
 WORLDS = [
     # Type     Black-body temp range
     ('Metal-Rich',   0,  1103.0),
@@ -43,6 +46,7 @@ def plugin_app(parent):
                             tk.Label(frame),
                             tk.Label(frame),
                             ))
+    this.spacer = tk.Frame(frame)	# Main frame can't be empty or it doesn't resize
     update_visibility()
     return frame
 
@@ -50,7 +54,7 @@ def plugin_prefs(parent):
     frame = nb.Frame(parent)
     nb.Label(frame, text = 'Display:').grid(row = 0, padx = 10, pady = (10,0), sticky=tk.W)
 
-    setting = config.getint('habzone') or 2
+    setting = get_setting()
     this.settings = []
     row = 1
     for (name, high, low) in WORLDS:
@@ -67,10 +71,10 @@ def prefs_changed():
     row = 1
     setting = 0
     for var in this.settings:
-        setting += var.get() * row
+        setting += var.get() and row
         row *= 2
 
-    config.set('habzone', setting)
+    config.set('habzone', setting or SETTING_NONE)
     this.settings = None
     update_visibility()
 
@@ -119,9 +123,17 @@ def journal_entry(cmdr, system, station, entry, state):
 def dfort(r, t, target):
     return (((r ** 2) * (t ** 4) / (4 * (target ** 4))) ** 0.5) / LS
 
+def get_setting():
+    setting = config.getint('habzone')
+    if setting == 0:
+        return DEFAULT_SETTING	# Default to Earth-Like
+    elif setting == SETTING_NONE:
+        return 0	# Explicitly set by the user to display nothing
+    else:
+        return setting
 
 def update_visibility():
-    setting = config.getint('habzone') or 2
+    setting = get_setting()
     row = 1
     for (label, near, dash, far, ls) in this.worlds:
         if setting & row:
@@ -137,3 +149,8 @@ def update_visibility():
             far.grid_remove()
             ls.grid_remove()
         row *= 2
+    if setting:
+        this.spacer.grid_remove()
+    else:
+        this.spacer.grid(row = 0)
+
