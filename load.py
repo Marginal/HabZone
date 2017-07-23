@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 #
-# System display and EDSM lookup
+# Display the "habitable-zone" (i.e. the range of distances in which you might find an Earth-Like World)
 #
 
 import sys
@@ -11,6 +12,7 @@ if __debug__:
     from traceback import print_exc
 
 from config import config
+from l10n import Locale
 
 VERSION = '1.00'
 
@@ -83,13 +85,21 @@ def journal_entry(cmdr, system, station, entry, state):
                 for i in range(len(WORLDS)):
                     (name, high, low) = WORLDS[i]
                     (label, near, dash, far, ls) = this.worlds[i]
-                    if not high:
-                        near['text'] = str(int(0.5 + r / LS))
+                    far_dist = int(0.5 + dfort(r, t, low))
+                    radius = int(0.5 + r / LS)
+                    if far_dist <= radius:
+                        near['text'] = ''
+                        dash['text'] = u'×'
+                        far['text'] = ''
+                        ls['text'] = ''
                     else:
-                        near['text'] = str(int(0.5 + dfort(r, t, high)))
-                    dash['text'] = '-'
-                    far['text'] = str(int(0.5 + dfort(r, t, low)))
-                    ls['text'] = 'ls'
+                        if not high:
+                            near['text'] = Locale.stringFromNumber(radius)
+                        else:
+                            near['text'] = Locale.stringFromNumber(int(0.5 + dfort(r, t, high)))
+                        dash['text'] = '-'
+                        far['text'] = Locale.stringFromNumber(far_dist)
+                        ls['text'] = 'ls'
         except:
             for (label, near, dash, far, ls) in this.worlds:
                 near['text'] = ''
