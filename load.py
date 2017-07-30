@@ -220,7 +220,7 @@ def edsm_data(event):
 def get_setting():
     setting = config.getint('habzone')
     if setting == 0:
-        return DEFAULT_SETTING	# Default to Earth-Like
+        return SETTING_DEFAULT	# Default to Earth-Like
     elif setting == SETTING_NONE:
         return 0	# Explicitly set by the user to display nothing
     else:
