@@ -207,14 +207,14 @@ def edsm_data(event):
 
     # Display
     systemName = this.edsm_data.get('name', '')
-    url = 'https://www.edsm.net/show-system?systemName=%s' % urllib2.quote(systemName)
+    url = 'https://www.edsm.net/show-system?systemName=%s&bodyName=ALL' % urllib2.quote(systemName)
     for i in range(len(WORLDS)):
         (name, high, low, subType) = WORLDS[i]
         (label, edsm, near, dash, far, ls) = this.worlds[i]
         edsm['text'] = ' '.join([x[len(systemName):].replace(' ', '') if x.startswith(systemName) else x for x in bodies[subType]])
-        edsm['url'] = url
+        edsm['url'] = len(bodies[subType]) == 1 and 'https://www.edsm.net/show-system?systemName=%s&bodyName=%s' % (urllib2.quote(systemName), urllib2.quote(bodies[subType][0])) or url
     this.terraformable['text'] = ' '.join([x[len(systemName):].replace(' ', '') if x.startswith(systemName) else x for x in bodies['terraformable']])
-    this.terraformable['url'] = url
+    this.terraformable['url'] = len(bodies['terraformable']) == 1 and 'https://www.edsm.net/show-system?systemName=%s&bodyName=%s' % (urllib2.quote(systemName), urllib2.quote(bodies['terraformable'][0])) or url
 
 
 def get_setting():
