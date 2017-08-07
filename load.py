@@ -171,14 +171,12 @@ def edsm_worker(systemName):
     if not this.edsm_session:
         this.edsm_session = requests.Session()
 
-    r = this.edsm_session.get('https://www.edsm.net/api-system-v1/bodies?systemName=%s' % urllib2.quote(systemName), timeout=10)
-    if r.status_code != requests.codes.ok:
+    try:
+        r = this.edsm_session.get('https://www.edsm.net/api-system-v1/bodies?systemName=%s' % urllib2.quote(systemName), timeout=10)
+        r.raise_for_status()
+        this.edsm_data = r.json()
+    except:
         this.edsm_data = None
-    else:
-        try:
-            this.edsm_data = r.json()
-        except:
-            this.edsm_data = None
 
     # Tk is not thread-safe, so can't access widgets in this thread.
     # event_generate() is the only safe way to poke the main thread from this thread.
