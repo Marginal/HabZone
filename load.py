@@ -19,7 +19,7 @@ if __debug__:
 from config import config
 from l10n import Locale
 
-VERSION = '1.10'
+VERSION = '1.11'
 
 SETTING_DEFAULT = 0x0002	# Earth-like
 SETTING_EDSM    = 0x1000
