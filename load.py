@@ -174,7 +174,7 @@ def edsm_worker(systemName):
     try:
         r = this.edsm_session.get('https://www.edsm.net/api-system-v1/bodies?systemName=%s' % urllib2.quote(systemName), timeout=10)
         r.raise_for_status()
-        this.edsm_data = r.json()
+        this.edsm_data = r.json() or {}	# Unknown system represented as empty list
     except:
         this.edsm_data = None
 
