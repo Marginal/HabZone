@@ -26,11 +26,12 @@ SETTING_EDSM    = 0x1000
 SETTING_NONE    = 0xffff
 
 WORLDS = [
-    # Type     Black-body temp range  EDSM description
-    ('Metal-Rich',   0,  1103.0, 'Metal-rich body'),
-    ('Earth-Like', 278.0, 227.0, 'Earth-like world'),
-    ('Water',      307.0, 156.0, 'Water world'),
-    ('Ammonia',    193.0, 117.0, 'Ammonia world'),
+    # Type    Black-body temp range  EDSM description
+    ('Metal-Rich',      0,  1103.0, 'Metal-rich body'),
+    ('Earth-Like',    278.0, 227.0, 'Earth-like world'),
+    ('Water',         307.0, 156.0, 'Water world'),
+    ('Ammonia',       193.0, 117.0, 'Ammonia world'),
+    ('Terraformable', 315.0, 223.0, 'terraformable'),
 ]
 
 LS = 300000000.0	# 1 ls in m (approx)
@@ -63,8 +64,6 @@ def plugin_app(parent):
                             tk.Label(this.frame),	# far
                             tk.Label(this.frame),	# ls
                             ))
-    this.terraformable_label = tk.Label(this.frame, text = 'Terraformable:')
-    this.terraformable = HyperlinkLabel(this.frame)
     this.spacer = tk.Frame(this.frame)	# Main frame can't be empty or it doesn't resize
     update_visibility()
     return this.frame
@@ -191,8 +190,6 @@ def edsm_data(event):
         for (label, edsm, near, dash, far, ls) in this.worlds:
             edsm['text'] = '?'
             edsm['url'] = None
-        this.terraformable['text'] = '?'
-        this.terraformable['url'] = None
         return
 
     # Collate
@@ -211,8 +208,6 @@ def edsm_data(event):
         (label, edsm, near, dash, far, ls) = this.worlds[i]
         edsm['text'] = ' '.join([x[len(systemName):].replace(' ', '') if x.startswith(systemName) else x for x in bodies[subType]])
         edsm['url'] = len(bodies[subType]) == 1 and 'https://www.edsm.net/show-system?systemName=%s&bodyName=%s' % (urllib2.quote(systemName), urllib2.quote(bodies[subType][0])) or url
-    this.terraformable['text'] = ' '.join([x[len(systemName):].replace(' ', '') if x.startswith(systemName) else x for x in bodies['terraformable']])
-    this.terraformable['url'] = len(bodies['terraformable']) == 1 and 'https://www.edsm.net/show-system?systemName=%s&bodyName=%s' % (urllib2.quote(systemName), urllib2.quote(bodies['terraformable'][0])) or url
 
 
 def get_setting():
@@ -243,12 +238,6 @@ def update_visibility():
             far.grid_remove()
             ls.grid_remove()
         row *= 2
-    if setting & SETTING_EDSM:
-        this.terraformable_label.grid(row = row, column = 0, sticky=tk.W)
-        this.terraformable.grid(row = row, column = 1, sticky=tk.W)
-    else:
-        this.terraformable_label.grid_remove()
-        this.terraformable.grid_remove()
     if setting:
         this.spacer.grid_remove()
     else:
