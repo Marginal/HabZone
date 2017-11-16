@@ -58,7 +58,7 @@ def plugin_app(parent):
     this.frame.bind('<<HabZoneData>>', edsm_data)	# callback when EDSM data received
     for (name, high, low, subType) in WORLDS:
         this.worlds.append((tk.Label(this.frame, text = name + ':'),
-                            HyperlinkLabel(this.frame),	# edsm
+                            HyperlinkLabel(this.frame, wraplength=100),	# edsm
                             tk.Label(this.frame),	# near
                             tk.Label(this.frame),	# dash
                             tk.Label(this.frame),	# far
