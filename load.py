@@ -58,7 +58,7 @@ def plugin_start():
 def plugin_app(parent):
     # Create and display widgets
     this.frame = tk.Frame(parent)
-    this.frame.columnconfigure(3, weight=1)
+    this.frame.columnconfigure(6, weight=1)
     this.frame.bind('<<HabZoneData>>', edsm_data)	# callback when EDSM data received
     this.starused_label = tk.Label(this.frame, text = 'Star used: [0]')
     this.starused = HyperlinkLabel(this.frame)
