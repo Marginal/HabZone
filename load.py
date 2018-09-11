@@ -287,15 +287,14 @@ def update_visibility():
     this.starused.grid(row = row, column = 1, columnspan=3, sticky=tk.W)
     this.starused_prev.grid(row = row, column = 4, sticky=tk.E)
     this.starused_next.grid(row = row, column = 5, sticky=tk.E)
-    row += 1
     for (label, edsm, near, dash, far, ls) in this.worlds:
         if setting & row:
-            label.grid(row = row, column = 0, sticky=tk.W)
-            edsm.grid(row = row, column = 1, sticky=tk.E)
-            near.grid(row = row, column = 2, sticky=tk.E)
-            dash.grid(row = row, column = 3, sticky=tk.E)
-            far.grid(row = row, column = 4, sticky=tk.E)
-            ls.grid(row = row, column = 5, sticky=tk.E)
+            label.grid(row = row+1, column = 0, sticky=tk.W)
+            edsm.grid(row = row+1, column = 1, sticky=tk.E)
+            near.grid(row = row+1, column = 2, sticky=tk.E)
+            dash.grid(row = row+1, column = 3, sticky=tk.E)
+            far.grid(row = row+1, column = 4, sticky=tk.E)
+            ls.grid(row = row+1, column = 5, sticky=tk.E)
         else:
             label.grid_remove()
             edsm.grid_remove()
@@ -303,7 +302,7 @@ def update_visibility():
             dash.grid_remove()
             far.grid_remove()
             ls.grid_remove()
-        row += 1
+        row *= 2
     if setting:
         this.spacer.grid_remove()
     else:
