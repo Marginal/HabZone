@@ -152,12 +152,12 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         this.starused['text'] = ''
         this.starused['url'] = ''
         for (label, edsm, near, dash, far, ls) in this.worlds:
-            edsm['text'] = ' '
-            edsm['url'] = ' '
-            near['text'] = ' '
-            dash['text'] = ' '
-            far['text'] = ' '
-            ls['text'] = ' '
+            edsm['text'] = ''
+            edsm['url'] = ''
+            near['text'] = ''
+            dash['text'] = ''
+            far['text'] = ''
+            ls['text'] = ''
         this.systemName = entry['StarSystem']
 
     if entry['event'] in ['Location', 'FSDJump', 'StartUp'] and get_setting() & SETTING_EDSM:
@@ -172,16 +172,16 @@ def cmdr_data(data, is_beta):
     this.stars = defaultdict(list)
     this.bodies = defaultdict(list)
     this.starused_label['text'] = 'Star used: [0]'
-    this.starused['text'] = ' '
-    this.starused['url'] = ' '
+    this.starused['text'] = ''
+    this.starused['url'] = ''
     
     for (label, edsm, near, dash, far, ls) in this.worlds:
-        edsm['text'] = ' '
-        edsm['url'] = ' '
-        near['text'] = ' '
-        dash['text'] = ' '
-        far['text'] = ' '
-        ls['text'] = ' '
+        edsm['text'] = ''
+        edsm['url'] = ''
+        near['text'] = ''
+        dash['text'] = ''
+        far['text'] = ''
+        ls['text'] = ''
     
     # Manual Update
     if get_setting() & SETTING_EDSM and not data['commander']['docked']:
