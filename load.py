@@ -7,6 +7,7 @@ from collections import defaultdict
 import requests
 import sys
 import threading
+import time
 import urllib2
 
 import Tkinter as tk
@@ -143,6 +144,16 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             dash['text'] = ''
             far['text'] = ''
             ls['text'] = ''
+	
+    elif entry['event'] == 'FSSAllBodiesFound' and get_setting() & SETTING_EDSM:
+        thread = threading.Thread(target = edsm_worker, name = 'EDSM worker', args = (entry['SystemName'], 2,))
+        thread.daemon = True
+        thread.start()
+    
+    elif entry['event'] == 'StartUp' and get_setting() & SETTING_EDSM:
+        thread = threading.Thread(target = edsm_worker, name = 'EDSM worker', args = (system,))
+        thread.daemon = True
+        thread.start()
 
     if entry['event'] in ['Location', 'FSDJump'] and get_setting() & SETTING_EDSM:
         thread = threading.Thread(target = edsm_worker, name = 'EDSM worker', args = (entry['StarSystem'],))
@@ -165,7 +176,9 @@ def dfort(r, t, target):
 
 
 # EDSM lookup
-def edsm_worker(systemName):
+def edsm_worker(systemName, sendDelay = 0):
+
+    time.sleep(sendDelay)
 
     if not this.edsm_session:
         this.edsm_session = requests.Session()
