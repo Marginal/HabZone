@@ -3,13 +3,21 @@
 # Display the "habitable-zone" (i.e. the range of distances in which you might find an Earth-Like World)
 #
 
+from __future__ import print_function
+
 from collections import defaultdict
 import requests
 import sys
 import threading
-import urllib2
+try:
+    # Python 2
+    from urllib2 import quote
+    import Tkinter as tk
+except ModuleNotFoundError:
+    # Python 3
+    from urllib.parse import quote
+    import tkinter as tk
 
-import Tkinter as tk
 from ttkHyperlinkLabel import HyperlinkLabel
 import myNotebook as nb
 
@@ -46,6 +54,9 @@ this.edsm_data = None
 this.settings = None
 this.edsm_setting = None
 
+
+def plugin_start3(plugin_dir):
+    return plugin_start()
 
 def plugin_start():
     # App isn't initialised at this point so can't do anything interesting
@@ -171,7 +182,7 @@ def edsm_worker(systemName):
         this.edsm_session = requests.Session()
 
     try:
-        r = this.edsm_session.get('https://www.edsm.net/api-system-v1/bodies?systemName=%s' % urllib2.quote(systemName), timeout=10)
+        r = this.edsm_session.get('https://www.edsm.net/api-system-v1/bodies?systemName=%s' % quote(systemName), timeout=10)
         r.raise_for_status()
         this.edsm_data = r.json() or {}	# Unknown system represented as empty list
     except:
@@ -202,12 +213,12 @@ def edsm_data(event):
 
     # Display
     systemName = this.edsm_data.get('name', '')
-    url = 'https://www.edsm.net/show-system?systemName=%s&bodyName=ALL' % urllib2.quote(systemName)
+    url = 'https://www.edsm.net/show-system?systemName=%s&bodyName=ALL' % quote(systemName)
     for i in range(len(WORLDS)):
         (name, high, low, subType) = WORLDS[i]
         (label, edsm, near, dash, far, ls) = this.worlds[i]
         edsm['text'] = ' '.join([x[len(systemName):].replace(' ', '') if x.startswith(systemName) else x for x in bodies[subType]])
-        edsm['url'] = len(bodies[subType]) == 1 and 'https://www.edsm.net/show-system?systemName=%s&bodyName=%s' % (urllib2.quote(systemName), urllib2.quote(bodies[subType][0])) or url
+        edsm['url'] = len(bodies[subType]) == 1 and 'https://www.edsm.net/show-system?systemName=%s&bodyName=%s' % (quote(systemName), quote(bodies[subType][0])) or url
 
 
 def get_setting():
