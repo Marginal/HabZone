@@ -133,11 +133,11 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
                         ls['text'] = ''
                     else:
                         if not high:
-                            near['text'] = Locale.stringFromNumber(radius)
+                            near['text'] = Locale.string_from_number(radius)
                         else:
-                            near['text'] = Locale.stringFromNumber(int(0.5 + dfort(r, t, high)))
+                            near['text'] = Locale.string_from_number(int(0.5 + dfort(r, t, high)))
                         dash['text'] = '-'
-                        far['text'] = Locale.stringFromNumber(far_dist)
+                        far['text'] = Locale.string_from_number(far_dist)
                         ls['text'] = 'ls'
         except:
             for (label, edsm, near, dash, far, ls) in this.worlds:
@@ -222,7 +222,7 @@ def edsm_data(event):
 
 
 def get_setting():
-    setting = config.getint('habzone')
+    setting = config.get_int('habzone')
     if setting == 0:
         return SETTING_DEFAULT	# Default to Earth-Like
     elif setting == SETTING_NONE:
